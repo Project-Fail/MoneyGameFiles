@@ -1,0 +1,768 @@
+Let's make a game!
+
+	name:Pay 2 Win
+	by:Project Fail
+	desc:Do you have enough paper?
+	created:When I made it.
+	updated:Just now, buddy.
+	version:1
+
+CSS
+#game.on
+{
+	background-size: 100% 100%;
+	image-rendering: pixelated;
+}
+
+
+.buildingIconSize
+{
+		height:64px;
+		width:64px
+}
+
+.infoSize
+{
+		height:361 px;
+		width:690 px
+}
+
+Settings	
+	background:https://file.garden/Z8Bsl4TDmAd0rHto/MoneyMaking/MMBackground.png
+	stylesheet:stuff/bigBlue.css
+	building cost refund:0%
+
+Resources
+	*dollar|dollars
+		name:Dollar|Dollars
+		desc:Money, money, money. Used to purchase buildings and expansion packs.
+		icon:https://file.garden/Z8Bsl4TDmAd0rHto/MoneyMaking/Resources/Money.png
+		class:noBackground
+		start with:1 dollar
+
+	*researchPoint|researchPoints
+		name:Research Point|Research Points
+		desc:The result of numerous tests and failures.
+		class:noBackground
+		hidden when 0
+
+	*muscle
+		name:Muscle
+		desc:Hard work + dedication + bench press = Muscle.
+		class:noBackground
+		hidden when 0
+
+Buttons
+//Printers
+	*brokenPrinter
+		name:Broken Money Printer
+		desc:Don't click it."Print money with the Money Printer 9000." - Scam Enterprises
+		icon:https://file.garden/Z8Bsl4TDmAd0rHto/MoneyMaking/Buttons/BrokenMoneyPrinter.png
+		on click:yield -1 dollars
+		class:bigButton
+		
+	*moneyPrinter
+		name:Money Printer
+		desc:"The last one was broken. Now it's back and better than ever!" - Actually Working Enterprises
+		icon:https://file.garden/Z8Bsl4TDmAd0rHto/MoneyMaking/Buttons/MoneyPrinter.png
+		on click:yield 1 dollars
+		on click:anim icon wobble
+		class:bigButton hasFlares
+		on tick:
+			if (have unlockPrinter)
+				show moneyPrinter
+			else
+				hide moneyPrinter
+			end
+		end
+//Info Button
+	*info
+		name:IMPORTANT INFO
+		desc:CLICK ME, THEN FIX THE PRINTER. IF YOU CLICKED THE BROKEN PRINTER, WIPE YOUR PROGRESS.
+		on click:hide info
+		on tick:
+		if (info:clicks = 1)
+		hide info
+		else
+		show info
+		end
+	end
+
+Buildings
+	*lemonadeStand|lemonadeStands
+		desc:Makes <b>0.1 dollars per second.<b><q>Best lemonade for miles. (Because there is none)</q>
+		on tick:
+		icon:
+		if (have bobaStand)
+		icon:https://file.garden/Z8Bsl4TDmAd0rHto/MoneyMaking/Buildings/BobaStandIcon.png
+		else
+		icon:https://file.garden/Z8Bsl4TDmAd0rHto/MoneyMaking/Buildings/Lemons.png
+		end
+		end
+		on tick:yield 0.1 dollars
+		on tick:
+		if (have bobaStand)
+		name:Boba Stand|Boba Stands
+		else
+		name:Lemonade|Lemonade
+		end
+		end
+		cost:10 dollars
+
+	*counterFeiter|counterFeiters
+		name:Counterfeiter|Counterfeiters
+		desc:These guys are so good at their jobs that THEY can't even tell if the money they made was fake.
+		on tick:yield 1 dollar
+		cost:100 dollars
+
+	*retailStore|retailStores
+		name:Retail Store|Retail Stores
+		desc:Buying other things and selling them at a higher price was a good idea.
+		on tick:yield 20 dollars
+		cost:1000 dollars
+
+	*gym|gyms
+		name:Gym|Gyms
+		desc:Gym bros for LIFE! Produces Money and Muscle.
+		icon:https://file.garden/Z8Bsl4TDmAd0rHto/MoneyMaking/Buildings/GymIcon.png
+		on tick:yield 1000 dollars
+		on tick:yield 1 muscle
+		cost:100000 dollars
+		req:firstExpansionPack
+
+	*restraunt|restraunts
+		name:Restaurant|Restaurants
+		desc:Great food from great places.
+		on tick:yield 2000 dollars
+		cost:500000 dollars
+		req:firstExpansionPack
+
+	*laundromat|laundromats
+		name:Laundromat|Laundromats
+		desc:Are you sure that these are JUST laundromats?
+		on tick:yield 8000 dollars
+		cost:1500000 dollars
+		req:firstExpansionPack
+
+	*printerFactory|printerFactories
+		name:Printer Factory|Printer Factories
+		desc:Factories that print printers that print money. Passively multiplies Money printer gains by amount of Factories.
+		on tick:yield 500000 dollars
+		cost:30000000 dollars
+		req:secondExpansionPack
+		passive:multiply yield of moneyPrinter by printerFactories*5
+
+	*casino|casinos
+		name:Casino|Casinos
+		desc:Either lose it all or win big!
+		on tick:yield 10000000 dollars
+		cost:100000000 dollars
+		req:secondExpansionPack
+
+	*lab|labs
+		name:Lab|Labs
+		desc:Gives a new currency, research points. Research points are used for upgrades, but use money to make them. Just make sure you're making <b>more than 1 billion dollars per second, ok?</b>
+		on tick:yield 1 researchPoint
+		on tick:yield -1000000000 dollars
+		cost:10000000000 dollars
+		req:secondExpansionPack
+
+	*bank|banks
+		name:Bank|Banks
+		desc:It holds money, which makes money. It doesn't make sense.
+		on tick:yield 50000000000 dollars
+		cost:10000000000000 dollars
+		req:thirdExpansion
+
+	*carCompany|carCompanies
+		name:Car Company|Car Companies
+		desc:"Drive on" - Better Cars Enterprises
+		on tick:yield 10000000000000 dollars
+		cost:100000000000000 dollars
+		req:thirdExpansion
+
+	*airport|airports
+		name:Airport|Airports
+		desc:"Fly like me!" - A Flightless Bird
+		on tick:yield 250000000000000 dollars
+		cost:10000000000000000 dollars
+		req:thirdExpansion
+
+	*researchCenter|researchCenters
+		name:Research Center|Research Centers
+		desc:A better lab. Make sure you make <b>more than 100 trillion a second.</b>
+		on tick:yield 1000 researchPoints
+		on tick:yield -100000000000000 dollars
+		cost:10000000000000000000 dollars
+		req:thirdExpansion
+		
+//Final Thing in Earth
+
+	*ownTheWorld
+		name:Own The World.
+		desc:You own everything. There's no more that can be bought. Unless...
+		cost:1000000000000000000000000000000000 dollars
+
+Upgrades
+
+//Printer Upgrades
+
+	*unlockPrinter
+		name:Fix the Money Printer
+		desc:Once you fix the printer, you can get to printing.
+		cost:1 dollar
+		passive:hide brokenPrinter
+	
+	*quickerHands
+		name:Quicker Hands
+		desc:Doubles Money Printer's, Counterfeiters' and Lemonade Stands' gains.<q>I guess your hands got used to the printer.</q>
+		passive:multiply yield of moneyPrinter by 2
+		passive:multiply yield of counterFeiter by 2
+		passive:multiply yield of lemonadeStand by 2
+		cost:100 dollars
+		req:1 lemonadeStand
+		
+	*secondPrinter
+		name:Second Printer
+		desc:Doubles Printer's gains.<q>Double the printers, double the efficiency.</q>
+		passive:multiply yield of moneyPrinter by 2
+		cost:2500 dollars
+		req:have quickerHands
+		req:5000 dollars:earned
+
+	*tutoring
+		name:Tutoring
+		desc:Money gain from the Money Printer is multiplied by amount of Counterfeiters.<q>You're TERRIBLE at this!</q>
+		cost:5000 dollars
+		req:have secondPrinter
+		req:2500 dollars:earned
+		passive:
+	if (have secondaryTutoring)
+		multiply yield of moneyPrinter by counterFeiter*10
+		else
+		if (have indepthTutoring)
+			multiply yield of moneyPrinter by counterFeiter
+		else
+			multiply yield of moneyPrinter by counterFeiter*0.3
+		end
+	end
+end
+
+	*powerClicks
+		name:Power Clicks
+		desc:Money Printer gain becomes exponential.<q>Is it useless anymore?</q>
+		passive:
+	if (have strongerClicks)
+		multiply yield of moneyPrinter by pow(2,dollars/dollars*0.125)
+	else
+		multiply yield of moneyPrinter by pow(2,dollars/dollars*0.05)
+	end
+end
+		cost:10000000000000 dollars
+		cost:10000000 researchPoints
+		req:25 researchCenters
+		req:75 printerFactory
+
+	*strongerClicks
+		name:Stronger Clicks
+		desc:Improves Power Clicks.<q>I think it isn't useless.</q>
+		cost:1000000000000000 dollars
+		cost:100000000000 researchPoints
+		req:powerClicks
+		req:50 researchCenters
+
+//Lemonade Stand Gains
+
+	*betterBlenders
+		name:Better Blenders
+		desc:Doubles Lemonade Stand's money gain.<q>I guess you need a Vitamix.</q>
+		passive:multiply yield of lemonadeStand by 2
+		cost:500 dollars
+		req:50 dollars
+
+	*upgradeLook
+		name:Cooler Lemonade Stand
+		desc:Quintuples Lemonade stand money gain.<q>We can't sell lemonade on a shabby wooden stand now, can we?</q>
+		passive:multiply yield of lemonadeStand by 5
+		cost:2000 dollars
+		req:10 lemonadeStands
+		req:have betterBlenders
+
+	*industrialization
+		name:Industrialization
+		desc:Multiplies Lemonade Stand earnings by 50.<q>Chugga, Chugga.</q>
+		passive:multiply yield of lemonadeStand by 50
+		cost:25000000 dollars
+		req:have upgradeLook
+		req:100 lemonadeStands
+
+	*betterRatio
+		name:Better Ratio
+		desc:Multiplies earnings of Lemonade Stand by 1000.<q>Less lemon, more sugar.</q>
+		passive:multiply yield of lemonadeStand by 1000
+		cost:10000 researchPoints
+		req:have industrialization
+		req:150 lemonadeStands
+
+	*bobaStand
+		name:Boba Stand
+		desc:Boba stands earn 5000x more than lemonade stands, if you switch, that is. <q>Bobaaa...</q>
+		passive:multiply yield of lemonadeStands by 5000
+		cost:50000 researchPoints
+		req:have betterRatio
+		req:200 lemonadeStands
+	
+//Counterfeiter Upgrades
+
+	*onlineCourses
+		name:Online Courses
+		desc:Quadruples Counterfeiter earnings.<q>The counterfeiters decided to watch online courses.</q>
+		passive:multiply yield of counterFeiters by 4
+		cost:1000 dollars
+		req:1 counterFeiter
+
+	*betterPrinters
+		name:Better Printers
+		desc:Triples counterfeiters' and the printer's earnings.<q>Actually Working Enterprises advertised a new and better printer, so the counterfeiters decided to buy it.</q>
+		passive:multiply yield of counterFeiters by 3
+		passive:multiply yield of moneyPrinter by 3
+		cost:10000 dollars
+		req:10 counterFeiters
+
+	*newTechniques
+		name:New Techniques
+		desc:Quadruples counterfeiter earnings.<q>The counterfeiters decided to make their own money printing techniques.</q>
+		passive:multiply yield of counterFeiter by 4
+		cost:100000 dollars
+		req:25 counterFeiters
+
+	*indepthTutoring
+		name:In-depth Tutoring
+		desc:Improves Tutoring.<q>The counterfeiters decided to teach you more in-depth.</q>
+		cost:1000000 dollars
+		req:50 counterFeiters
+
+	*secondaryTutoring
+		name:Secondary Tutoring
+		desc:Improves Tutoring so much that it can't be improved any more.<q>The counterfeiters got a teacher to teach them to teach you.</q>
+		cost:1000000000 dollars
+		req:75 counterFeiters
+		
+//Retail Store Upgrades
+
+	*moreItems
+		name:More Items
+		desc:Doubles Retail Store gains.<q>More items equals more profits.</q>
+		passive:multiply yield of retailStore by 2
+		cost:10000 dollars
+		req:1 retailStores
+
+	*expansion
+		name:Expansion
+		desc:Doubles Retail Store gains again.<q>More outlets to reach more places.</q>
+		passive:multiply yield of retailStore by 2
+		cost:50000 dollars
+		req:10 retailStores
+
+	*newWarehouse
+		name:New Warehouse
+		desc:Quadruples Retail Store gains.<q>A warehouse that stores all of your needs.</q>
+		passive:multiply yield of retailStore by 4
+		cost:2500000 dollars
+		req:25 retailStores
+
+	*moreOutlets
+		name:More Outlets
+		desc:Quintuples Retail Store gains.<q>Adds more locations around the world.</q>
+		passive:multiply yield of retailStore by 5
+		cost:750000 dollars
+		req:50 retailStores
+
+	*centTechnique
+		name:The 99 cent technique
+		desc:Multiplies Retail Store earnings by 10.<q>The ultimate technique to get people to spend more.</q>
+		passive:multiply yield of retailStore by 10
+		cost:99999999 dollars
+		req:100 retailStores
+		
+//Expansion Packs and Stuff
+
+	*firstExpansionPack
+		name:First Expansion Pack
+		desc:Unlocks 3 new buildings to purchase, and a new plethora of upgrades. <q>Whoo hoo!</q>
+		cost:10000 dollars
+		req:7500 dollars
+
+	*secondExpansionPack
+		name:Second Expansion Pack
+		desc:Unlocks more advanced buildings and even more upgrades. <q>Already?</q>
+		cost:10000000 dollars
+		req:have firstExpansionPack
+		req:5 laundromats
+
+	*thirdExpansion
+		name:Third Expansion Pack
+		desc:Unlocks more buildings and upgrades. <q>Just when you think there can't be any more content.</q>
+		cost:1000000000000000 dollars
+		req:50 casinos
+		req:have secondExpansionPack
+		
+	*spaceExpansion
+		name:Space Expansion
+		desc:Unlocks Space.<q>The future is near.</q>
+		cost:1000000000000000000000 dollars
+		cost:10000000000 research points
+		req:1 ownTheWorld
+		
+//Gym Upgrades
+
+	*betterEquipment
+		name:Better Equipment
+		desc:Doubles gym gains. <q>20 more reps!</q> 
+		passive:multiply yield of gyms by 2
+		cost:500000 dollars
+		req:1 gym
+		
+		
+	*doubleBulk
+		name:Double Bulk
+		desc:Doubles <b>all gains</b> from <b>first expansion and basic</b> buildings. Buildings and the printer.<q>Bulk in money and muscle.</q> 
+		passive:multiply yield of moneyPrinter by 2
+		passive:multiply yield of lemonadeStand by 2
+		passive:multiply yield of counterFeiter by 2
+		passive:multiply yield of retailStore by 2
+		passive:multiply yield of gym by 2
+		passive:multiply yield of restraunt by 2
+		passive:multiply yield of laundromat by 2
+		cost:1000000 dollars
+		cost:500 muscle
+		req:10 gyms
+
+	*advertising
+		name:Advertising
+		desc:Multiplies money yield of gym by muscle.<q>Ooh, muscle.</q>
+		on tick:
+		if (have famousFigures)
+		multiply yield of laundromat by muscle*0.3
+		multiply yield of casino by muscle*0.3
+		end
+		end
+		on tick:
+		if (have famousFigures)
+		multiply dollar yield of gym by muscle
+		multiply yield of lemonadeStand by muscle*0.3
+		multiply yield of counterFeiters by muscle*0.3
+		multiply yield of retailStores by muscle*0.3
+		multiply yield of restraunt by muscle*0.3
+		else
+		if (have betterAdvertising)
+		multiply dollar yield of gym by muscle*0.5
+		else
+		multiply dollar yield of gym by muscle*0.1
+		end
+		end
+		end
+		cost:10000 dollars
+		cost:20000 muscle
+		req:3000 muscle
+		req:25 gyms
+
+	*proteinShakes
+		name:Protein Shakes
+		desc:Doubles gym gains, including muscle. <q>Can I have a chocolate one?</q>
+		passive:multiply yield of gym by 2
+		cost:10000000 dollars
+		req:50000 muscle
+		req:50 gyms
+
+	*betterAdvertising
+		name:Exceptional Advertising
+		desc:Improves advertising. <q>Ooh, muscle and protein shakes.</q>
+		cost:1000000000 dollars
+		req:100 gyms
+		req:500000 muscle
+
+	*famousFigures
+		name:Famous Figures
+		desc:Improves advertising so much that it cannot be improved further. It does cost muscle though. However, it does advertise other buildings, granting more money.<q>Ooh, muscle, protein shakes, and... John Cena?</q>
+		cost:100000000000 dollars
+		cost:1000000 muscle
+		req:150 gyms
+
+//Restaurant Upgrades
+	*betterStaff
+		name:Better Staff
+		desc:Doubles Restaurant gains.<q>Quality over quantity, as they say.</q>
+		passive:multiply yield of restraunt by 2
+		cost:750000 dollars
+		req:1 restraunt
+
+	*fiveCourseMeals
+		name:Five-Course Meals
+		desc:Triples Restaurant gains.<q>5 courses to satisfy anyone's hunger.</q>
+		passive:multiply yield of restraunt by 3
+		cost:15000000 dollars
+		req:10 restraunts
+		req:have betterStaff
+
+	*expandingCultures
+		name:Expanding Cultures
+		desc:Quadruples Restaurant gains.<q>Gimme Pad Thai!</q> 
+		passive:multiply yield of restraunt by 4
+		cost:100000000 dollars
+		req:25 restraunts
+		req:have fiveCourseMeals
+
+	*onlineOrdering
+		name:Online Ordering
+		desc:Triples Restaurant gains.<q>Where's Block Blast?</q>
+		passive:multiply yield of restraunt by 3
+		cost:1000000000 dollars
+		req:50 restraunts
+		req:have expandingCultures
+		
+//Laundromat Upgrades
+	*betterAppliances
+		name:Better Appliances
+		desc:Doubles Laundromat gains.<q>Thumpa thumpa thumpa.</q>
+		passive:multiply yield of laundromat by 2
+		cost:2500000 dollars
+		req:1 laundromat
+		
+	*mutualAgreement
+		name:Mutual Agreement
+		desc:Multiplies Counterfieter gain by Laundromats and Laundromat gain by Counterfeiters.<q>Contract for the ages.</q>
+		passive:
+		if (have completelyUnfair)
+			multiply yield of counterFeiter by laundromats*25
+			multiply yield of laundromats by counterFeiter*2
+		else
+		if (have betterContract)
+			multiply yield of counterFeiter by laundromats*10
+			multiply yield of laundromats by counterFeiter*0.6
+		else
+			multiply yield of counterFeiter by laundromats*5
+			multiply yield of laundromats by ceil(counterFeiter*0.1)
+			end
+		end
+	end
+		cost:10000000 dollars
+		req:50 counterFeiter
+		req:10 laundromat
+
+	*hiddenCasinos
+		name:Hidden Casinos
+		desc:Triples laundromat earnings.<q>Is this a Young Sheldon reference?</q>
+		passive:multiply yield of casino by 3
+		cost:1000000000 dollars
+		req:50 laundromats
+		req:10 casinos
+		
+	*betterContract
+		name:A Better Contract
+		desc:Improves Mutual Agreement.<q>Improving is a good idea.</q>
+		cost:10000000000 dollars
+		req:100 laundromats
+		req:have mutualAgreement
+
+	*completelyUnfair
+		name:A Completely Unfair Contract
+		desc:Improves Mutual Agreement so much that it can't be improved anymore.<q>It's either they accept, or I'll give them an offer they can't refuse.</q>
+		cost:100000000000 dollars
+		req:150 laundromats
+		req:have betterContract
+
+//Printer Factory Upgrades
+
+	*assemblyLines
+		name:Assembly Lines
+		desc:Doubles Printer Factory earnings.<q>Cool lines.</q>
+		passive:multiply yield of printerFactory by 2
+		cost:100000000 dollars
+		req:1 printerFactory
+
+	*changeableParts
+		name:Interchangeable Parts
+		desc:Quadruples Printer Factory earnings.<q>Change parts easily with this new strategy.</q>
+		passive:multiply yield of printerFactory by 4
+		cost:1000000000 dollars
+		req:10 printerFactory
+
+	*selfPrinters
+		name:Printers That Print Printers
+		desc:Quintuples Printer Factory earnings.<q>Printers that print Printers that print printers that print printers...</q>
+		passive:multiply yield of printerFactory by 5
+		cost:100000000000 dollars
+		req:25 printerFactory
+
+	*differentPrinters
+		name:Different Printers
+		desc:Doubles Printer Factory gains. <q>Ok, so we have fire printers, water printers...</q>
+		passive:multiply yield of printerFactory by 2
+		cost:10000000000000 dollars
+		req:50 printerFactory
+
+//Casino Upgrades
+
+	*entertainmentSection
+		name:Entertainment Section
+		desc:Doubles casino earnings.<q>And his name is John Cena.</q>
+		passive:multiply yield of casinos by 2
+		cost:1000000000 dollars
+		req:1 casinos
+	
+	*moreGames
+		name:More Games
+		desc:Doubles Casino earnings.<q>More games for more players.</q>
+		passive:multiply yield of casinos by 2
+		cost:100000000 dollars
+		req:10 casinos
+		
+	*lotteryTickets
+		name:Lottery Tickets
+		desc:<q>Throw in lottery tickets with gambling.</q> Doubles Casino earnings.
+		passive:multiply yield of casinos by 2
+		cost:1000000000 dollars
+		req:25 casinos
+
+	*bars
+		name:New Bar
+		desc:Triples Casino earnings.<q>How's your night been?</q>
+		passive:multiply yield of casinos by 3
+		cost:15000000000 dollars
+		req:50 casinos
+
+	*biggerisBetter
+		name:Bigger Is Better
+		desc:Multiplies casino earnings by 10.<q>Here comes the boom.</q>
+		passive:multiply yield of casinos by 10
+		cost:1000000000000 dollars
+		req:100 casinos
+
+//Lab Upgrades
+	*moreSupport
+		name:More Support
+		desc:Triples research point gain.<q>Supply drop incoming!</q>
+		passive:multiply researchPoint yield of labs by 3
+		cost:10000000000 dollars
+		req:1 lab
+		
+	*hireExperts
+		name:Hire Experts
+		desc:Multiplies cost and yield of labs by 5.<q>Erm, Akshually, you're wrong</q>
+		passive:multiply yield of labs by 5
+		cost:100000000000 dollars
+		req:10 labs
+		
+	*betterTests
+		name:Better Tests
+		desc:Multiplies research points by 5 and cuts costs in half. <q>Quality over quantity again?</q>
+		passive:multiply researchPoints yield of labs by 5
+		passive:multiply dollar yield of labs by 0.5
+		cost:10000000000000 dollars
+		cost:100000 researchPoints
+		req:25 labs
+
+//Bank Upgrades
+	*biggerVault
+		name:Bigger Vault
+		desc:Doubles bank earnings.<q>Big bois.</q>
+		passive:multiply yield of bank by 2
+		cost:100000000000000 dollars
+		req:1 bank
+		
+	*secureReception
+		name:Secure Reception
+		desc:Triples bank earnings.<q>Hey! Get back here!</q>
+		passive:multiply yield of bank by 3
+		cost:1000000000000000 dollars
+		req:10 banks
+
+	*higherSalary
+		name:Higher Salary
+		desc:Multiplies earnings of banks by counterfeiters. <q>Is this real? (It's not.)</q>
+		passive:multiply yield of bank by counterFeiters*0.3
+		cost:10000000000000000 dollars
+		req:25 banks
+
+//Car Company Upgrades
+	*betterMotors
+		name:Better Motors
+		desc:Doubles car company earnings.<q>Vroom, Vroom.</q>
+		passive:multiply yield of carCompany by 2
+		cost:10000000000000000 dollars
+		cost:10000000 researchPoints
+		req:1 carCompany
+
+	*coolerPlace
+		name:Cooler Establishment
+		desc:Triples car company earnings.<q>Cool place, man.</q>
+		passive:multiply yield of carCompany by 3
+		cost:100000000000000000 dollars
+		cost:100000000 researchPoints
+		req:10 carCompany
+
+//Airport
+	*morePlanes
+		name:More Planes
+		desc:Doubles airport earnings.
+		passive:multiply yield of airport by 2
+		cost:1000000000000000000 dollars
+		req:1 airport
+
+	*fasterFlights
+		name:Faster Flights
+		desc:Doubles airport earnings.<q>Woosh!</q>
+		passive:multiply yield of airport by 2
+		cost:1000000000000000000 dollars
+		cost:1000000000 researchPoints
+		req:10 airports
+
+//Research Center Upgrades
+	*moreHelp
+		name:More Help
+		desc:Doubles Research Center gain.
+		passive:multiply researchPoint yield of researchCenter by 2
+		cost:10000000000000000 dollars
+		req:1 researchCenter
+
+	*conventions
+		name:Science Conventions
+		desc:Triples Research Center gains and costs.
+		passive:multiply yield of researchCenter by 3
+		cost:100000000000000000 dollars
+		req:10 researchCenters
+
+Achievements
+
+	*oneStand
+		name:When Life Gives You Lemons
+		desc:You make lemonade stands to profit off of it. Have 1 Lemonade Stand.
+		icon:https://file.garden/Z8Bsl4TDmAd0rHto/MoneyMaking/Buildings/Lemons.png
+		req:1 lemonadeStand
+
+	*tenStands
+		name:Lemon Rain
+		desc:Have 10 Lemonade Stands
+		req:10 lemonadeStand
+
+	*hundredDollars
+		name:You're rich! Not.
+		desc:Have 100 dollars.
+		icon:https://file.garden/Z8Bsl4TDmAd0rHto/Pay2Win/Resources/Money.png
+		req:100 dollars:earned
+
+	*thousandDollars
+		name:Novice Printer
+		desc:Have 1000 dollars.
+		req:1000 dollars:earned
+
+	*tenkDollars
+		name:Adept Printer
+		desc:Have 10000 dollars.
+		req:10000 dollars:earned
+
+	*hundredkDollars
+		name:Experienced Printer
+		desc:Have 100000 dollars.
+		req:100000 dollars:earned
